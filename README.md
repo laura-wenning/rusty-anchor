@@ -1,0 +1,15 @@
+# TODO
+- [ ] Generate a map
+  - [ ] Generate rooms 
+  - [ ] Generate halls
+  - [ ] Room styles (circular, rounded, etc)
+- [ ] Player character
+  - [ ] Player exists
+  - [ ] Movement
+  - [ ] Collision
+- [ ] Camera
+  - [ ] Camera follows player
+- [ ] Save/Load
+  - [ ] Save to a file
+  - [ ] Load from a file
+- [ ] Menu
