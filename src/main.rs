@@ -1,87 +1,40 @@
+// use rand::Rng;
+use crate::map::*;
+
+pub mod map;
+
 fn main() {
+  // let mut rng = rand::thread_rng();
   let map = Map::new();
   map.render();
   // println!("{:?}", map);
+
 }
 
-#[derive(Debug)]
-enum Tile {
-  Null, // A non-space used for void or other unknowns
-  Floor, // Walkable floor
-  Wall, // A solid wall
-}
 
-impl Tile {
-  fn render(&self) -> char {
-    match self {
-      Self::Floor => ' ',
-      Self::Wall => '█',
-      _ => '░'
-    }
-  }
-}
+// struct Engine {
 
-#[derive(Debug)]
-struct Map {
-  width: i32,
-  height: i32,
-  layout: Vec<Vec<Tile>>
-}
+// }
 
-impl Map {
-  fn new() -> Self {
-    let width = 40;
-    let height = 40;
+// struct Screen {
+//   position: Position,
+//   width: i32,
+//   height: i32
+// }
 
-    let mut map = Map {
-      width,
-      height,
-      layout: Vec::new()
-    };
+// // Describes a room within a map
+// struct Room {
+//   position: Position,
+//   width: i32,
+//   height: i32,
+// }
 
-    map.generate_map();
-    map
-  }
-}
+// impl Room {
+//   fn new() {
+//     Room {
+//       position: Position()
+//     }
+//   }
+// }
 
-impl Map {
-  fn generate_map(&mut self) {
-    self.layout = Vec::new();
-    for y_coordinate in 0..self.height {
-      let mut x_vector = Vec::new();
-      for x_coordinate in 0..self.width {
-        let tile: Tile = if x_coordinate == y_coordinate {
-            Tile::Floor
-          } else {
-            Tile::Wall
-          };
-        x_vector.push(tile);
-      }
-      self.layout.push(x_vector);
-    }
-  }
-
-  fn render(&self) {
-    let mut render = String::from("");
-    let mut y_iter = self.layout.iter();
-
-    'y_loop: loop {
-      let y_value = y_iter.next();
-      if let None = y_value { break 'y_loop; }
-
-      let mut x_iter = y_value.unwrap().iter();
-      'x_loop: loop {
-        let x_value = x_iter.next();
-        if let None = x_value { break 'x_loop; }
-
-
-        render.push(x_value.unwrap().render());
-      }
-      render.push('\n');
-    }
-
-    
-    println!("{}", render);
-  }
-}
-
+// type Postion(i32, i32);
