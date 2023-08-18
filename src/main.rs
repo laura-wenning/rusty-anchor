@@ -1,3 +1,5 @@
+use systems::translate::Translate;
+
 // use rand::Rng;
 use crate::engine::GameEngine;
 use crate::systems::screen::Screen;
@@ -16,14 +18,18 @@ fn main() -> io::Result<()> {
   Screen::setup()?;
   let mut engine: GameEngine = GameEngine::new();
   let camera_id: u32 = new_camera(&mut engine);
-  new_player(&mut engine);
+  let player_id: u32 = new_player(&mut engine);
   if let Err(_) = engine.set_active_camera(camera_id) {
     Screen::teardown()?;
     panic!("Camera could not be set. Exiting");
   }
   Screen::draw(&mut engine)?;
 
-  thread::sleep(time::Duration::from_secs(5));
+  for _ in 0..5 {
+    thread::sleep(time::Duration::from_secs(1));
+    Translate::translate(&mut engine, player_id, 1.0, 0.0);
+    Screen::draw(&mut engine)?;
+  }
   // let mut rng = rand::thread_rng();
   // let map = Map::new();
   // map.render();
@@ -31,7 +37,7 @@ fn main() -> io::Result<()> {
   Screen::teardown()
 }
 
-fn new_player(engine: &mut GameEngine) -> () {
+fn new_player(engine: &mut GameEngine) -> u32 {
   let player_id = engine.entities.add("player".to_string());
   engine.components.positions.register(player_id);
   if let Some(player_position) = engine.components.positions.get_mut(player_id) {
@@ -44,6 +50,7 @@ fn new_player(engine: &mut GameEngine) -> () {
     (*player_visible).sprite = '@';
     (*player_visible).is_visible = true;
   }
+  player_id
 }
 
 fn new_camera(engine: &mut GameEngine) -> u32 {
