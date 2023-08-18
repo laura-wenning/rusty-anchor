@@ -1,11 +1,13 @@
+
 use crate::entities::EntityManager;
 use crate::components::ComponentManager;
+use crate::systems::screen::Screen;
 
 pub struct GameEngine {
   pub entities: EntityManager,
   pub components: ComponentManager,
 
-  pub active_camera: Option<u32>,
+  pub active_camera_id: Option<u32>,
 }
 
 impl GameEngine {
@@ -14,18 +16,18 @@ impl GameEngine {
       entities: EntityManager::new(),
       components: ComponentManager::new(),
 
-      active_camera: None
+      active_camera_id: None
     }
   }
 
-  pub fn set_active_camera(&mut self, camera_id: u32) -> bool {
-    // If this is not a valid camera, fail
-    if let None = self.components.cameras.get(camera_id) {
-      return false;
+  pub fn set_active_camera(&mut self, camera_id: u32) -> Result<(), ()> {
+    let camera_error = Screen::is_valid_camera(self, camera_id);
+    if let Err(error_message) = camera_error {
+      eprintln!("{}", error_message);
+      return Err(());
     }
-    self.active_camera = Some(camera_id);
-    return true;
-  }
 
- 
+    self.active_camera_id = Some(camera_id);
+    Ok(())
+  }
 }

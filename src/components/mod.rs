@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, hash_map::Iter};
 
 use crate::components::{
   camera::Camera,
@@ -36,6 +36,10 @@ impl<T: ComponentTrait> ComponentContainer<T> {
 
   pub fn get_mut(&mut self, entity_id: u32) -> Option<&mut T> {
     self.components.get_mut(&entity_id)
+  }
+
+  pub fn iter(&mut self) -> Iter<u32, T> {
+    self.components.iter()
   }
 }
 
