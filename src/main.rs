@@ -32,26 +32,32 @@ fn main() -> io::Result<()> {
 }
 
 fn run_game() -> io::Result<()> {
-  let mut engine: GameEngine = GameEngine::new();
-
-  let player_id: u32 = PlayerFactory::new(&mut engine);
-  CameraFactory::new(&mut engine);
-  
-  Screen::draw(&mut engine)?;
+  let mut engine: GameEngine = setup_game();
 
   for _ in 0..50 {
-    Input::wait_for_keypress(&mut engine, player_id)?;
     Screen::draw(&mut engine)?;
+    Input::wait_for_keypress(&mut engine, 0)?;
   }
   Ok(())
 }
 
+/// Sets up the surrounding environment prior to the game running
 fn setup() -> std::io::Result<()> {
   Screen::setup()?;
   Ok(())
 }
 
+/// Tears down all changes made to the surrounding environment following the conclusion of the game
 fn teardown() -> std::io::Result<()> {
   Screen::teardown()?;
   Ok(())
+}
+
+/// Initializes the game space with all required defaults, menus, player, camera, and other entities
+fn setup_game() -> GameEngine {
+  let mut engine: GameEngine = GameEngine::new();
+  PlayerFactory::new(&mut engine);
+  CameraFactory::new(&mut engine);
+
+  engine
 }
