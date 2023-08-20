@@ -1,4 +1,4 @@
-use systems::translate::Translate;
+use systems::input::Input;
 
 // use rand::Rng;
 use crate::engine::GameEngine;
@@ -11,7 +11,7 @@ mod engine;
 mod tiles;
 mod systems;
 
-use std::{io, thread, time};
+use std::io;
 
 
 fn main() -> io::Result<()> {
@@ -25,16 +25,13 @@ fn main() -> io::Result<()> {
   }
   Screen::draw(&mut engine)?;
 
-  for _ in 0..5 {
-    thread::sleep(time::Duration::from_secs(1));
-    Translate::translate(&mut engine, player_id, 1.0, 0.0);
+  for _ in 0..50 {
+    Input::wait_for_keypress(&mut engine, player_id)?;
     Screen::draw(&mut engine)?;
   }
-  // let mut rng = rand::thread_rng();
-  // let map = Map::new();
-  // map.render();
-  // println!("{:?}", map);
-  Screen::teardown()
+
+  Screen::teardown()?;
+  Ok(())
 }
 
 fn new_player(engine: &mut GameEngine) -> u32 {
@@ -50,6 +47,8 @@ fn new_player(engine: &mut GameEngine) -> u32 {
     (*player_visible).sprite = '@';
     (*player_visible).is_visible = true;
   }
+
+  engine.components.controllables.register(player_id);
   player_id
 }
 

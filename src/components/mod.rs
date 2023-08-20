@@ -1,11 +1,14 @@
 use std::collections::{HashMap, hash_map::Iter};
 
-use crate::components::{
+use self::{
   camera::Camera,
+  controllable::Controllable,
   position::Position,
   visible::Visible
 };
+
 pub mod camera;
+mod controllable;
 mod position;
 mod visible;
 
@@ -47,6 +50,7 @@ impl<T: ComponentTrait> ComponentContainer<T> {
 
 pub struct ComponentManager {
   pub cameras: ComponentContainer<Camera>,
+  pub controllables: ComponentContainer<Controllable>,
   pub positions: ComponentContainer<Position>,
   pub visible: ComponentContainer<Visible>,
 }
@@ -57,6 +61,7 @@ impl ComponentManager {
   pub fn new() -> Self {
     Self {
       cameras: ComponentContainer::new(),
+      controllables: ComponentContainer::new(),
       positions: ComponentContainer::new(),
       visible: ComponentContainer::new(),
     } 

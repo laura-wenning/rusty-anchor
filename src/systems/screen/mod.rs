@@ -7,8 +7,8 @@ use crossterm::style::Stylize;
 use crossterm::{QueueableCommand, style};
 use crossterm::{execute, {
   style::ResetColor,
-  terminal::{EnterAlternateScreen, LeaveAlternateScreen},
-  cursor::{self, Show, Hide}
+  terminal::{EnterAlternateScreen, LeaveAlternateScreen, enable_raw_mode, disable_raw_mode},
+  cursor::{self, Show, Hide},
 }};
 
 
@@ -21,10 +21,12 @@ impl Screen {
       io::stdout(),
       EnterAlternateScreen,
       Hide,
-    )
+    )?;
+    enable_raw_mode()
   }
 
   pub fn teardown() -> io::Result<()> {
+    disable_raw_mode()?;
     execute!(
       io::stdout(),
       Show,
@@ -40,18 +42,12 @@ impl Screen {
     }
 
     let ref active_camera_id = engine.active_camera_id.unwrap();
-    let mut camera_camera = engine.components.cameras.get_mut(*active_camera_id).unwrap();
+    let camera_camera = engine.components.cameras.get_mut(*active_camera_id).unwrap();
 
     let mut stdout = io::stdout();
     Self::draw_background(&mut stdout, camera_camera)?;
     Self::draw_entities(&mut stdout, engine)?;
-    
     stdout.flush()?;
-
-    // initialize_camera(&mut camera_camera);
-    // flush_camera(&mut camera_camera);
-
-    // draw_to_screen(&mut camera_camera);
 
     Ok(())
   }
