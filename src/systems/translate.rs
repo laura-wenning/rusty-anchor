@@ -1,5 +1,6 @@
 use crate::engine::GameEngine;
 
+/// Handles translation of an entity
 pub struct Translate {}
 impl Translate {
   pub fn translate(engine: &mut GameEngine, entity_id: u32, x: f32, y: f32) {

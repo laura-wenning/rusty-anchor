@@ -1,4 +1,4 @@
-use std::collections::{HashMap, hash_map::Iter};
+use std::collections::{HashMap, hash_map::{Iter, Keys}};
 
 use self::{
   camera::Camera,
@@ -19,18 +19,21 @@ pub trait ComponentTrait {
 
 pub struct ComponentContainer<T> {
   components: HashMap<u32, T>,
+  keys: Vec<u32>,
 }
 
 impl<T: ComponentTrait> ComponentContainer<T> {
   pub fn new() -> Self {
     Self {
       components: HashMap::new(),
+      keys: Vec::new(),
     }
   }
 
   pub fn register(&mut self, entity_id: u32) -> () {
     let new_component: T = T::new(entity_id);
     self.components.insert(entity_id, new_component);
+    self.keys.push(entity_id);
   }
 
   pub fn get(&self, entity_id: u32) -> Option<&T> {
@@ -43,6 +46,14 @@ impl<T: ComponentTrait> ComponentContainer<T> {
 
   pub fn iter(&mut self) -> Iter<u32, T> {
     self.components.iter()
+  }
+
+  /// Gets a list of all keys for entities used within this component
+  /// 
+  /// The vector clone is used to prevent issues from lifetimes
+  /// TODO - possibly optimize this?
+  pub fn keys(&self) -> Vec<u32> {
+    self.keys.clone()
   }
 }
 

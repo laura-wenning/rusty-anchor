@@ -1,17 +1,20 @@
+use enums::actions::Action;
 use factories::Factory;
 use factories::{
   camera::CameraFactory,
   player::PlayerFactory
 };
+use systems::controller::Controller;
 use systems::input::Input;
 
 // use rand::Rng;
 use crate::engine::GameEngine;
 use crate::systems::screen::Screen;
 
-pub mod map;
-pub mod components;
+mod map;
+mod components;
 mod entities;
+mod enums;
 mod engine;
 mod factories;
 mod tiles;
@@ -32,13 +35,39 @@ fn main() -> io::Result<()> {
 }
 
 fn run_game() -> io::Result<()> {
-  let mut engine: GameEngine = setup_game();
+  let mut engine = match setup_game() {
+    Ok(engine) => engine,
+    Err(message) => {
+      println!("{}", message);
+      return Err(std::io::Error::new(io::ErrorKind::Other, message));
+    }
+  };
 
-  for _ in 0..50 {
-    Screen::draw(&mut engine)?;
-    Input::wait_for_keypress(&mut engine, 0)?;
+  let p2_id = PlayerFactory::new(&mut engine).unwrap();
+  {
+    let position = engine.components.positions.get_mut(p2_id).unwrap();
+    position.x = 3.0;
+    position.y = 3.0;
   }
-  Ok(())
+
+  loop {
+    Screen::draw(&mut engine)?;
+    let input_event = Input::get_input_blocking();
+    let action = Input::input_to_action(input_event);
+
+    if let None = action { continue; }
+    let action = action.unwrap();
+
+    match action {
+      Action::MoveUp => Controller::for_all(&mut engine, Controller::move_up),
+      Action::MoveDown => Controller::for_all(&mut engine, Controller::move_down),
+      Action::MoveLeft => Controller::for_all(&mut engine, Controller::move_left),
+      Action::MoveRight => Controller::for_all(&mut engine, Controller::move_right),
+      Action::Quit => return Ok(()),
+    }
+
+    // TODO - tick?
+  }
 }
 
 /// Sets up the surrounding environment prior to the game running
@@ -54,10 +83,10 @@ fn teardown() -> std::io::Result<()> {
 }
 
 /// Initializes the game space with all required defaults, menus, player, camera, and other entities
-fn setup_game() -> GameEngine {
+fn setup_game() -> Result<GameEngine, String> {
   let mut engine: GameEngine = GameEngine::new();
-  PlayerFactory::new(&mut engine);
-  CameraFactory::new(&mut engine);
+  if let Err(message) = PlayerFactory::new(&mut engine) { return Err(message); }
+  if let Err(message) = CameraFactory::new(&mut engine) { return Err(message); }
 
-  engine
+  Ok(engine)
 }

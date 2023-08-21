@@ -4,5 +4,5 @@ pub mod camera;
 pub mod player;
 
 pub trait Factory {
-  fn new(engine: &mut GameEngine) -> u32;
+  fn new(engine: &mut GameEngine) -> Result<u32, String>;
 }

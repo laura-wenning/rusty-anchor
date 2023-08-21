@@ -1,4 +1,6 @@
 
+use std::error;
+
 use crate::entities::EntityManager;
 use crate::components::ComponentManager;
 use crate::systems::screen::Screen;
@@ -20,11 +22,10 @@ impl GameEngine {
     }
   }
 
-  pub fn set_active_camera(&mut self, camera_id: u32) -> Result<(), ()> {
+  pub fn set_active_camera(&mut self, camera_id: u32) -> Result<(), String> {
     let camera_error = Screen::is_valid_camera(self, camera_id);
     if let Err(error_message) = camera_error {
-      eprintln!("{}", error_message);
-      return Err(());
+      return Err(error_message);
     }
 
     self.active_camera_id = Some(camera_id);

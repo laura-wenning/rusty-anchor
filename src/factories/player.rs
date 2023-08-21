@@ -4,7 +4,8 @@ use super::Factory;
 
 pub struct PlayerFactory {}
 impl Factory for PlayerFactory {
-  fn new(engine: &mut GameEngine) -> u32 {
+  /// Creates a new player for the given Game Engine and returns the ID
+  fn new(engine: &mut GameEngine) -> Result<u32, String> {
     let player_id = engine.entities.add("player".to_string());
 
     engine.components.positions.register(player_id);
@@ -22,6 +23,6 @@ impl Factory for PlayerFactory {
 
     engine.components.controllables.register(player_id);
 
-    player_id
+    Ok(player_id)
   }
 }

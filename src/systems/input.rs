@@ -1,53 +1,47 @@
-use crossterm::event::{read, Event, KeyCode};
+use crossterm::event::{read, Event, KeyCode, KeyEvent};
 
-use crate::engine::GameEngine;
-
-use super::translate::Translate;
-
+use crate::enums::actions::Action;
+/// Describes taking inputs and converting that to actions
 pub struct Input {}
 impl Input {
-  pub fn wait_for_keypress(engine: &mut GameEngine, player_id: u32) -> std::io::Result<()> {
-    let mut command: Option<fn(&mut GameEngine, u32) -> ()> = None;
+  /// Gets an input while blocking program progress
+  /// 
+  /// Returns a filtered crossterm::event::Event object for keypress events
+  pub fn get_input_blocking() -> Event {
     loop {
-      command = match read()? {
-        Event::Key(event) => {
-          Self::keypress_to_command(event.code)
-        },
-        _ => continue,
-      };
-      if let None = command { return Ok(()); }
-      break;
-    }
+      let input_event: Result<Event, std::io::Error> = read();
+      if let Err(_) = input_event { continue; }
 
-    command.unwrap()(engine, player_id);
-    Ok(())
+      let input_event: Event = input_event.unwrap();
+      match input_event {
+        Event::Key(_) => return input_event,
+        _ => continue,
+      }
+    }
   }
 
-  fn keypress_to_command(keypress: KeyCode) -> Option<fn(&mut GameEngine, u32) -> ()> {
-    let run_action = match keypress {
-      KeyCode::Left => Self::move_left,
-      KeyCode::Right => Self::move_right,
-      KeyCode::Up => Self::move_up,
-      KeyCode::Down => Self::move_down,
+  /// Converts an input into an Action enum
+  /// 
+  /// This can potentially be modified for mouse events if we want it
+  pub fn input_to_action(input_event: Event) -> Option<Action> {
+    match input_event {
+      Event::Key(key_event) => return Self::keypress_to_action(key_event),
+      _ => return None,
+    }
+  }
+
+  /// Converts a keypress into an action
+  /// 
+  /// TODO - allow this to read in setting information so that inputs can be remapped
+  fn keypress_to_action(key_event: KeyEvent) -> Option<Action> {
+    let action = match key_event.code {
+      KeyCode::Up => Action::MoveUp,
+      KeyCode::Down => Action::MoveDown,
+      KeyCode::Left => Action::MoveLeft,
+      KeyCode::Right => Action::MoveRight,
+      KeyCode::Char('q') => Action::Quit,
       _ => return None,
     };
-
-    return Some(run_action);
-  }
-
-  fn move_left(engine: &mut GameEngine, entity_id: u32) {
-    Translate::translate(engine, entity_id, -1.0, 0.0);
-  }
-
-  fn move_right(engine: &mut GameEngine, entity_id: u32) {
-    Translate::translate(engine, entity_id, 1.0, 0.0);
-  }
-
-  fn move_up(engine: &mut GameEngine, entity_id: u32) {
-    Translate::translate(engine, entity_id, 0.0, -1.0);
-  }
-
-  fn move_down(engine: &mut GameEngine, entity_id: u32) {
-    Translate::translate(engine, entity_id, 0.0, 1.0);
+    Some(action)
   }
 }
