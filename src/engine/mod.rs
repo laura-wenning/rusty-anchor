@@ -1,6 +1,3 @@
-
-use std::error;
-
 use crate::entities::EntityManager;
 use crate::components::ComponentManager;
 use crate::systems::screen::Screen;

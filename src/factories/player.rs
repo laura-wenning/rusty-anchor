@@ -14,6 +14,8 @@ impl Factory for PlayerFactory {
       (*player_position).y = 1f32;
     }
 
+    engine.components.scale.register(player_id);
+
     engine.components.visible.register(player_id);
     
     if let Some(player_visible) = engine.components.visible.get_mut(player_id) {

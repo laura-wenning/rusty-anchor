@@ -1,16 +1,17 @@
-use std::collections::{HashMap, hash_map::{Iter, Keys}};
+use std::collections::{HashMap, hash_map::{Iter}};
 
 use self::{
   camera::Camera,
   controllable::Controllable,
   position::Position,
-  visible::Visible
+  visible::Visible, scale::Scale
 };
 
 pub mod camera;
 mod controllable;
 mod position;
 mod visible;
+mod scale;
 
 pub trait ComponentTrait {
   fn new(entity_id: u32) -> Self;
@@ -63,6 +64,7 @@ pub struct ComponentManager {
   pub cameras: ComponentContainer<Camera>,
   pub controllables: ComponentContainer<Controllable>,
   pub positions: ComponentContainer<Position>,
+  pub scale: ComponentContainer<Scale>,
   pub visible: ComponentContainer<Visible>,
 }
 
@@ -74,6 +76,7 @@ impl ComponentManager {
       cameras: ComponentContainer::new(),
       controllables: ComponentContainer::new(),
       positions: ComponentContainer::new(),
+      scale: ComponentContainer::new(),
       visible: ComponentContainer::new(),
     } 
   }
