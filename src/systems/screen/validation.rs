@@ -28,8 +28,8 @@ impl Screen {
       return Err(format!("Invalid camera with id: {}. No camera component", camera_id));
     }
 
-    if let None = engine.components.positions.get(camera_id) {
-      return Err(format!("Invalid camera with id: {}. No position component", camera_id));
+    if let None = engine.components.translations.get(camera_id) {
+      return Err(format!("Invalid camera with id: {}. No translation component", camera_id));
     }
     Ok(())
   }

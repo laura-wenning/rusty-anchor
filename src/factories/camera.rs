@@ -11,7 +11,7 @@ impl Factory for CameraFactory {
   fn new(engine: &mut GameEngine) -> Result<u32, String> {
     let camera_id = engine.entities.add("camera".to_string());
 
-    engine.components.positions.register(camera_id);
+    engine.components.translations.register(camera_id);
     engine.components.cameras.register(camera_id);
     
     if let Some(_) = engine.active_camera_id {

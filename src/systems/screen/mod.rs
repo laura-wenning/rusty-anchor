@@ -70,16 +70,16 @@ impl Screen {
 
       let (entity_id, visible) = visible.unwrap();
       if !visible.is_visible { continue; }
-      let position = engine.components.positions.get(*entity_id);
-      if let None = position { continue; }
-      let position = position.unwrap();
+      let translation = engine.components.translations.get(*entity_id);
+      if let None = translation { continue; }
+      let translation = translation.unwrap();
 
       // TODO - bounding system
-      if position.x < 0.0 || position.x > (camera.width - 1) as f32 { continue; }
-      else if position.y < 0.0 || position.y > (camera.height - 1) as f32 { continue; }
+      if translation.x_position < 0.0 || translation.x_position > (camera.width - 1) as f32 { continue; }
+      else if translation.y_position < 0.0 || translation.y_position > (camera.height - 1) as f32 { continue; }
 
-      let x = position.x.round() as u32;
-      let y = position.y.round() as u32;
+      let x = translation.x_position.round() as u32;
+      let y = translation.y_position.round() as u32;
 
       Self::draw_at(stdout, x, y, visible.sprite)?;
     }

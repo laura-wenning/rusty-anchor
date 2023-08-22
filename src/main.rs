@@ -45,9 +45,9 @@ fn run_game() -> io::Result<()> {
 
   let p2_id = PlayerFactory::new(&mut engine).unwrap();
   {
-    let position = engine.components.positions.get_mut(p2_id).unwrap();
-    position.x = 3.0;
-    position.y = 3.0;
+    let translation = engine.components.translations.get_mut(p2_id).unwrap();
+    translation.x_position = 3.0;
+    translation.y_position = 3.0;
   }
 
   loop {

@@ -8,13 +8,11 @@ impl Factory for PlayerFactory {
   fn new(engine: &mut GameEngine) -> Result<u32, String> {
     let player_id = engine.entities.add("player".to_string());
 
-    engine.components.positions.register(player_id);
-    if let Some(player_position) = engine.components.positions.get_mut(player_id) {
-      (*player_position).x = 1f32;
-      (*player_position).y = 1f32;
+    engine.components.translations.register(player_id);
+    if let Some(player_translation) = engine.components.translations.get_mut(player_id) {
+      (*player_translation).x_position = 1f32;
+      (*player_translation).y_position = 1f32;
     }
-
-    engine.components.scale.register(player_id);
 
     engine.components.visible.register(player_id);
     

@@ -4,11 +4,11 @@ use crate::engine::GameEngine;
 pub struct Translate {}
 impl Translate {
   pub fn translate(engine: &mut GameEngine, entity_id: u32, x: f32, y: f32) {
-    let position = engine.components.positions.get_mut(entity_id);
-    if let None = position { return; }
+    let translation = engine.components.translations.get_mut(entity_id);
+    if let None = translation { return; }
 
-    let position = position.unwrap();
-    position.x = position.x + x;
-    position.y = position.y + y;
+    let translation = translation.unwrap();
+    translation.x_position = translation.x_position + x;
+    translation.y_position = translation.y_position + y;
   }
 }
