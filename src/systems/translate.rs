@@ -8,7 +8,7 @@ impl Translate {
     if let None = translation { return; }
 
     let translation = translation.unwrap();
-    translation.x_position = translation.x_position + x;
-    translation.y_position = translation.y_position + y;
+    translation.position.x = translation.position.x + x;
+    translation.position.y = translation.position.y + y;
   }
 }

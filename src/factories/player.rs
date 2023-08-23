@@ -10,8 +10,8 @@ impl Factory for PlayerFactory {
 
     engine.components.translations.register(player_id);
     if let Some(player_translation) = engine.components.translations.get_mut(player_id) {
-      (*player_translation).x_position = 1f32;
-      (*player_translation).y_position = 1f32;
+      (*player_translation).position.x = 1f32;
+      (*player_translation).position.y = 1f32;
     }
 
     engine.components.visible.register(player_id);

@@ -75,11 +75,11 @@ impl Screen {
       let translation = translation.unwrap();
 
       // TODO - bounding system
-      if translation.x_position < 0.0 || translation.x_position > (camera.width - 1) as f32 { continue; }
-      else if translation.y_position < 0.0 || translation.y_position > (camera.height - 1) as f32 { continue; }
+      if translation.position.x < 0.0 || translation.position.x > (camera.width - 1) as f32 { continue; }
+      else if translation.position.y < 0.0 || translation.position.y > (camera.height - 1) as f32 { continue; }
 
-      let x = translation.x_position.round() as u32;
-      let y = translation.y_position.round() as u32;
+      let x = translation.position.x.round() as u32;
+      let y = translation.position.y.round() as u32;
 
       Self::draw_at(stdout, x, y, visible.sprite)?;
     }
@@ -92,29 +92,3 @@ impl Screen {
   }
 }
 
-
-fn initialize_camera(camera: &mut Camera) {
-  let area = usize::try_from(camera.height * camera.width).unwrap();
-  if camera.buffer.len() == area {
-    return;
-  }
-  camera.buffer.resize(area, ' ');
-}
-
-fn flush_camera(camera: &mut Camera) {
-  camera.buffer.fill('_');
-}
-
-fn draw_to_screen(camera: &mut Camera) {
-  let mut screen = String::new();
-  let area = usize::try_from(camera.height * camera.width).unwrap();
-  let width = usize::try_from(camera.width).unwrap();
-  for buffer_index in 0..area {
-    if buffer_index % width == 0 && buffer_index != 0 {
-      screen.push('\n');
-    }
-
-    screen.push(camera.buffer[buffer_index]);
-  }
-  println!("{}", screen);
-}

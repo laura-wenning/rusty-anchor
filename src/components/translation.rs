@@ -1,19 +1,24 @@
 use super::ComponentTrait;
 
+pub struct Coordinates {
+  pub x: f32,
+  pub y: f32,
+  pub z: f32,
+}
+
+impl Coordinates {
+  fn new(x: f32, y: f32, z: f32) -> Self {
+    Self { x, y, z }
+  }
+}
+
 pub struct Translation {
   pub owner: u32,
 
-  pub x_position: f32,
-  pub y_position: f32,
-  pub z_position: f32, // Will be mostly used for layer heights
+  pub position: Coordinates,
+  pub origin: Coordinates,
+  pub scale: Coordinates,
 
-  pub x_scale: f32,
-  pub y_scale: f32,
-  pub z_scale: f32, // Possibly unused
-
-  pub x_rotation: f32,
-  pub y_rotation: f32,
-  pub z_rotation: f32, // The only rotation that matters in 2d
 }
 
 impl ComponentTrait for Translation {
@@ -21,17 +26,9 @@ impl ComponentTrait for Translation {
     Self {
       owner: entity_id,
 
-      x_position: 0.0,
-      y_position: 0.0,
-      z_position: 0.0,
-
-      x_scale: 1.0,
-      y_scale: 1.0,
-      z_scale: 1.0,
-
-      x_rotation: 0.0,
-      y_rotation: 0.0,
-      z_rotation: 0.0,
+      position: Coordinates::new(0.0, 0.0, 0.0),
+      scale: Coordinates::new(0.0, 0.0, 0.0),
+      origin: Coordinates::new(0.0, 0.0, 0.0),
     }
   }
 }
