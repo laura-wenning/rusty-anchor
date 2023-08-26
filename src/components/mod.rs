@@ -9,7 +9,7 @@ use self::{
 
 pub mod camera;
 mod controllable;
-mod translation;
+pub mod translation;
 mod visible;
 
 pub trait ComponentTrait {
@@ -30,10 +30,20 @@ impl<T: ComponentTrait> ComponentContainer<T> {
     }
   }
 
-  pub fn register(&mut self, entity_id: u32) -> () {
+  /// Register a new component for a given entity ID
+  pub fn register(&mut self, entity_id: u32) -> Result<(), &str> {
+    if self.components.contains_key(&entity_id) {
+      return Err("Entity already exists");
+    }
+
     let new_component: T = T::new(entity_id);
     self.components.insert(entity_id, new_component);
     self.keys.push(entity_id);
+    return Ok(())
+  }
+
+  pub fn has(&self, entity_id: u32) -> bool {
+    self.components.contains_key(&entity_id)
   }
 
   pub fn get(&self, entity_id: u32) -> Option<&T> {

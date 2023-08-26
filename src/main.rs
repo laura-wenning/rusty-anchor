@@ -1,5 +1,6 @@
+use components::translation::Coordinates;
 use enums::actions::Action;
-use factories::Factory;
+use factories::{Factory, GenericFactory};
 use factories::{
   camera::CameraFactory,
   player::PlayerFactory
@@ -42,7 +43,10 @@ fn run_game() -> io::Result<()> {
       return Err(std::io::Error::new(io::ErrorKind::Other, message));
     }
   };
-
+  GenericFactory::new(&mut engine, "anotherplayer".to_string())
+    .translation()
+      .position(Coordinates::new(3.0, 3.0, 3.0))
+    .close();
   let p2_id = PlayerFactory::new(&mut engine).unwrap();
   {
     let translation = engine.components.translations.get_mut(p2_id).unwrap();

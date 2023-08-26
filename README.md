@@ -4,8 +4,8 @@
   - [ ] Generate halls
   - [ ] Room styles (circular, rounded, etc)
 - [ ] Player character
-  - [ ] Player exists
-  - [ ] Movement
+  - [x] Player exists
+  - [x] Movement
   - [ ] Collision
 - [ ] Camera
   - [ ] Camera follows player
@@ -13,3 +13,8 @@
   - [ ] Save to a file
   - [ ] Load from a file
 - [ ] Menu
+- [ ] State Manager
+  - [ ] Generic State Manager that takes in a config that informs how the state will flow
+  - [ ] State Manager for menus
+
+
