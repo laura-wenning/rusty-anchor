@@ -13,7 +13,7 @@ impl Coordinates {
 }
 
 pub struct Translation {
-  pub owner: u32,
+  pub owner: usize,
 
   pub position: Coordinates,
   pub origin: Coordinates, // The translation of the point of origin from the center of this object
@@ -22,7 +22,7 @@ pub struct Translation {
 }
 
 impl ComponentTrait for Translation {
-  fn new(entity_id: u32) -> Self {
+  fn new(entity_id: usize) -> Self {
     Self {
       owner: entity_id,
 

@@ -5,7 +5,7 @@ pub mod camera;
 pub mod player;
 
 pub trait Factory {
-  fn new(engine: &mut GameEngine) -> Result<u32, String>;
+  fn new(engine: &mut GameEngine) -> Result<usize, String>;
 }
 
 // pub struct GenericFactory<'a> {

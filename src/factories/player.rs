@@ -5,7 +5,7 @@ use super::Factory;
 pub struct PlayerFactory {}
 impl Factory for PlayerFactory {
   /// Creates a new player for the given Game Engine and returns the ID
-  fn new(engine: &mut GameEngine) -> Result<u32, String> {
+  fn new(engine: &mut GameEngine) -> Result<usize, String> {
     let player_id = engine.entities.add("player".to_string());
 
     engine.components.translations.register(player_id);

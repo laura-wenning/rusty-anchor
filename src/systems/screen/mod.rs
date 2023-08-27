@@ -41,10 +41,10 @@ impl Screen {
     }
 
     let ref active_camera_id = engine.active_camera_id.unwrap();
-    let camera_camera = engine.components.cameras.get_mut(*active_camera_id).unwrap();
+    let camera_camera = engine.components.cameras.get_mut(*active_camera_id).unwrap().unwrap();
 
     let mut stdout = io::stdout();
-    Self::draw_background(&mut stdout, camera_camera)?;
+    Self::draw_background(&mut stdout, &camera_camera)?;
     Self::draw_entities(&mut stdout, engine)?;
     stdout.flush()?;
 
@@ -62,16 +62,16 @@ impl Screen {
 
   fn draw_entities(stdout: &mut Stdout, engine: &mut GameEngine) -> io::Result<()> {
     let mut iterator = engine.components.visible.iter();
-    let camera = engine.components.cameras.get(engine.active_camera_id.unwrap()).unwrap();
+    let camera = engine.components.cameras.get(engine.active_camera_id.unwrap()).unwrap().unwrap();
     loop {
       let visible = iterator.next();
       if let None = visible { break Ok(()); }
 
-      let (entity_id, visible) = visible.unwrap();
+      let visible = visible.unwrap().unwrap();
       if !visible.is_visible { continue; }
-      let translation = engine.components.translations.get(*entity_id);
+      let translation = engine.components.translations.get(visible.owner);
       if let None = translation { continue; }
-      let translation = translation.unwrap();
+      let translation = translation.unwrap().unwrap();
 
       // TODO - bounding system
       if translation.position.x < 0.0 || translation.position.x > (camera.width - 1) as f32 { continue; }

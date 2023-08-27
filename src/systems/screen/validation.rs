@@ -23,7 +23,7 @@ impl Screen {
     Ok(())
   }
 
-  pub fn is_valid_camera(engine: &GameEngine, camera_id: u32) -> Result<(), String> {
+  pub fn is_valid_camera(engine: &GameEngine, camera_id: usize) -> Result<(), String> {
     if let None = engine.components.cameras.get(camera_id) {
       return Err(format!("Invalid camera with id: {}. No camera component", camera_id));
     }

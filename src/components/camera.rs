@@ -1,7 +1,7 @@
 use super::ComponentTrait;
 
 pub struct Camera {
-  pub owner: u32,
+  pub owner: usize,
   pub height: u32,
   pub width: u32,
 
@@ -10,7 +10,7 @@ pub struct Camera {
 }
 
 impl ComponentTrait for Camera {
-  fn new(entity_id: u32) -> Self {
+  fn new(entity_id: usize) -> Self {
     Self {
       owner: entity_id,
       height: 5,

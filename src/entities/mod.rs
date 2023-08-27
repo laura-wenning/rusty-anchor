@@ -1,10 +1,10 @@
 pub struct Entity {
-  id: u32,
+  id: usize,
   name: String,
 }
 
 pub struct EntityManager {
-  current_index: u32,
+  current_index: usize,
   entities: Vec<Entity>,
 }
 
@@ -16,7 +16,7 @@ impl EntityManager {
     }
   }
 
-  pub fn add(&mut self, name: String) -> u32 {
+  pub fn add(&mut self, name: String) -> usize {
     let new_id = self.current_index.clone();
     self.current_index += 1;
 

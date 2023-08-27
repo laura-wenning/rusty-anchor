@@ -1,0 +1,1 @@
+pub const ENTITY_LIMIT: usize = 2048;

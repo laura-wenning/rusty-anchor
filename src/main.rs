@@ -19,6 +19,7 @@ mod engine;
 mod factories;
 mod tiles;
 mod systems;
+mod global;
 
 use std::io;
 
@@ -45,7 +46,7 @@ fn run_game() -> io::Result<()> {
 
   let p2_id = PlayerFactory::new(&mut engine).unwrap();
   {
-    let translation = engine.components.translations.get_mut(p2_id).unwrap();
+    let mut translation = engine.components.translations.get_mut(p2_id).unwrap().unwrap();
     translation.position.x = 3.0;
     translation.position.y = 3.0;
   }
