@@ -14,10 +14,45 @@ mod controllable;
 pub mod translation;
 mod visible;
 
-pub trait ComponentTrait {
-  fn new(entity_id: usize) -> Self;
+trait ComponentTrait {
+  fn new() -> Self;
 }
 
+/// Defines the common actions that can be taken for a component
+pub trait ComponentListTrait<T: ComponentTrait> {
+  /// Registers a new entity with the given ID
+  fn register(&self, entity_id: usize) -> Result<(), String> {
+    if let Err(error) = self.is_within_bounds(entity_id) { return Err(error); }
+    if let Some(_) = self.get(entity_id) {
+      return Err("Entity ID {} is already registered within {}", entity_id, self.get_name());
+    }
+    let component = T::new();
+    self.set(entity_id, component);
+  }
+
+  /// Determines if a value can be set for the given entity_id
+  fn can_set(&self, entity_id: usize) -> Result<(), String> {
+    if !self.is_within_bounds(entity_id) { return false; }
+    if !self.is_registered(entity_id) { return false; }
+    return true;
+  }
+
+  /// Determines if the entity_id is within the pre-defined bounds
+  fn is_within_bounds(&self, entity_id: usize) -> Result<(), String> {
+    return entity_id < ENTITY_LIMIT;
+  }
+
+  /// Determines if the given entity_id has a registered component
+  fn is_registered(&self, entity_id: usize) -> bool {
+    if !self.is_within_bounds(entity_id) { return false; }
+    if let None = self.get_array().get(entity_id) { return false; }
+  }
+
+  fn get_array() -> [T; ENTITY_LIMIT];
+  fn get_name() -> String;
+  fn get(entity_id: usize) -> T;
+  fn set(entity_id: usize, component: T) -> Result<(), ()>;
+}
 
 // pub struct ComponentContainer< T> {
 //   components: [T; ENTITY_LIMIT],

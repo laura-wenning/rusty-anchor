@@ -1,4 +1,4 @@
-use super::ComponentTrait;
+use super::ComponentListTrait;
 
 pub struct Camera {
   pub owner: usize,
@@ -9,8 +9,8 @@ pub struct Camera {
   pub buffer: Vec<char>,
 }
 
-impl ComponentTrait for Camera {
-  fn new(entity_id: usize) -> Self {
+impl ComponentListTrait for Camera {
+  fn register(entity_id: usize) -> Self {
     Self {
       owner: entity_id,
       height: 5,

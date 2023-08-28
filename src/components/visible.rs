@@ -1,4 +1,4 @@
-use super::ComponentTrait;
+use super::ComponentListTrait;
 
 pub struct Visible {
   pub owner: usize,
@@ -6,8 +6,8 @@ pub struct Visible {
   pub sprite: char,
 }
 
-impl ComponentTrait for Visible {
-  fn new(entity_id: usize) -> Self {
+impl ComponentListTrait for Visible {
+  fn register(entity_id: usize) -> Self {
     Self {
       owner: entity_id,
       is_visible: false,
