@@ -4,7 +4,7 @@ use super::{ComponentListTrait, ComponentTrait};
 
 static mut TRANSLATIONS: [Option<Translation>; ENTITY_LIMIT] = [None; ENTITY_LIMIT];
 
-#[derive(Copy)]
+#[derive(Clone)]
 pub struct Coordinates {
   pub x: f32,
   pub y: f32,
@@ -17,7 +17,7 @@ impl Coordinates {
   }
 }
 
-#[derive(Copy)]
+#[derive(Clone)]
 pub struct Translation {
   pub position: Coordinates,
   pub origin: Coordinates, // The translation of the point of origin from the center of this object
@@ -37,21 +37,5 @@ impl ComponentTrait for Translation {
 
 pub struct Translations {}
 
-impl ComponentListTrait<Translation> for Translations {
-  fn get_array() -> [Translation; ENTITY_LIMIT] {
-    TRANSLATIONS
-  }
 
-  fn get_name() -> String {
-    "Translations".to_string()
-  }
-
-  fn set(&self, entity_id: usize, translation: Translation) -> Result<(), String> {
-    if !self.can_set(entity_id) { return Err("".to_string()); }
-    unsafe {
-      TRANSLATIONS[entity_id] = Some(translation);
-    }
-    Ok(())
-  }
-}
 

@@ -2,12 +2,14 @@ use std::slice::Iter;
 
 use crate::global::ENTITY_LIMIT;
 
+
 use self::{
   camera::Camera,
   controllable::Controllable,
   translation::Translation,
   visible::Visible,
 };
+
 
 pub mod camera;
 mod controllable;
@@ -19,15 +21,15 @@ trait ComponentTrait {
 }
 
 /// Defines the common actions that can be taken for a component
-pub trait ComponentListTrait<T: ComponentTrait> {
+pub trait ComponentListTrait {
   /// Registers a new entity with the given ID
   fn register(&self, entity_id: usize) -> Result<(), String> {
     if let Err(error) = self.is_within_bounds(entity_id) { return Err(error); }
     if let Some(_) = self.get(entity_id) {
       return Err("Entity ID {} is already registered within {}", entity_id, self.get_name());
     }
-    let component = T::new();
-    self.set(entity_id, component);
+    // let component = T::new();
+    // self.set(entity_id, component);
   }
 
   /// Determines if a value can be set for the given entity_id
@@ -48,10 +50,6 @@ pub trait ComponentListTrait<T: ComponentTrait> {
     if let None = self.get_array().get(entity_id) { return false; }
   }
 
-  fn get_array() -> [T; ENTITY_LIMIT];
-  fn get_name() -> String;
-  fn get(entity_id: usize) -> T;
-  fn set(entity_id: usize, component: T) -> Result<(), ()>;
 }
 
 // pub struct ComponentContainer< T> {
